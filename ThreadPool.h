@@ -45,7 +45,7 @@ public:
 		);
 	}
 
-	void add(std::function<void()> func, std::function<void()> callback)
+	void add(std::function<void()> func, std::function<void()> callback = nullptr)
 	{
 		Task task;
 		task.task = func;
@@ -90,7 +90,7 @@ public:
 		}
 	}
 
-	void add(std::function<void()> task, std::function<void()> callback)
+	void add(std::function<void()> task, std::function<void()> callback = nullptr)
 	{
 		int index = 0;
 		for (int i = 1; i < _workers.size(); ++i)

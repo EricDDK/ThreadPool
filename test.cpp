@@ -26,6 +26,7 @@ int main()
 	pool.init(5);
 	pool.add(std::bind(&test1, 1, 2), std::bind(&callback));
 	pool.add(std::bind(&test2, 1.0, 2.0), std::bind(&callback));
+	pool.add(std::bind(&test2, 1.0, 2.0));
 	system("pause");
 	return 1;
 }
