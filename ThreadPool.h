@@ -37,18 +37,19 @@ public:
 					[this] { return !this->_taskQueue.empty(); });
 				auto task = this->_taskQueue.front();
 				this->_taskQueue.pop();
-				// TODO
-
+				task.task();
+				if (task.callback != nullptr)
+					task.callback();
 			}
 		}
 		);
 	}
 
-	template<class T, class... Args>
-	void add(T&& t, Args&&... args)
+	void add(std::function<void()> func, std::function<void()> callback)
 	{
 		Task task;
-		
+		task.task = func;
+		task.callback = callback;
 		_taskQueue.push(task);
 		this->_condition.notify_one();
 	}
@@ -69,10 +70,7 @@ private:
 class ThreadPool
 {
 public:
-	ThreadPool()
-	{
-		
-	}
+	ThreadPool() {}
 
 	~ThreadPool()
 	{
@@ -92,8 +90,7 @@ public:
 		}
 	}
 
-	template<class Func, class Callback, class... Args>
-	void add(Func&& t, Callback&& c, Args&&... args)
+	void add(std::function<void()> task, std::function<void()> callback)
 	{
 		int index = 0;
 		for (int i = 1; i < _workers.size(); ++i)
@@ -101,8 +98,7 @@ public:
 			if (_workers[i]->getSize() < _workers[index]->getSize())
 				index = i;
 		}
-		std::cout << index << std::endl;
-		_workers[index]->add(t, args...);
+		_workers[index]->add(task, callback);
 	}
 
 private:
