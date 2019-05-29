@@ -2,6 +2,7 @@
 A simple async thread pool implementation
 
 # Test
+you can change the ThreadPool to singleton. In the project, I will keep the situation without modification, and may require multiple thread pools.
 ```
 void test1(int a, int b)
 {
